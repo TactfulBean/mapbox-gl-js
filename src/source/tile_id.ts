@@ -32,16 +32,20 @@ export class CanonicalTileID {
                 parent.y === (this.y >> zDifference));
     }
 
-    // given a list of urls, choose a url template and return a tile URL
-    url(urls: Array<string>, scheme?: string | null): string {
+    // Given a list of URLs, choose a URL template and return a tile URL.
+    // EPSG:4490 tile services commonly number their zoom levels differently
+    // from the map's canonical zoom. `zoomOffset` applies that difference to
+    // the URL's {z} token while keeping the map's tile coordinates unchanged.
+    url(urls: Array<string>, scheme?: string | null, zoomOffset: number = 0): string {
         const bbox = getTileBBox(this.x, this.y, this.z);
         const quadkey = getQuadkey(this.z, this.x, this.y);
 
         return urls[(this.x + this.y) % urls.length]
             .replace('{prefix}', (this.x % 16).toString(16) + (this.y % 16).toString(16))
-            .replace(/{z}/g, String(this.z))
+            .replace(/{z}/g, String(this.z + zoomOffset))
             .replace(/{x}/g, String(this.x))
-            .replace(/{y}/g, String(scheme === 'tms' ? (Math.pow(2, this.z) - this.y - 1) : this.y))
+            // The 4490 grid has half as many rows as the square Mapbox grid.
+            .replace(/{y}/g, String(scheme === 'tms' ? (this.z === 0 ? 0 : Math.pow(2, this.z - 1) - this.y - 1) : this.y))
             .replace('{quadkey}', quadkey)
             .replace('{bbox-epsg-3857}', bbox);
     }
@@ -206,13 +210,13 @@ function getQuadkey(z: number, x: number, y: number) {
 }
 
 function getTileBBox(x: number, y: number, z: number) {
-    const z2 = 2 ** z;
-    const worldSize = 2 * Math.PI * 6378137;
-    const minX = worldSize * (x / z2 - 0.5);
-    const minY = worldSize * (0.5 - (y + 1) / z2);
-    const maxX = minX + worldSize / z2;
-    const maxY = minY + worldSize / z2;
-    return `${minX},${minY},${maxX},${maxY}`;
+    const tileSize = 360 / (2 ** z);
+    return [
+        x * tileSize - 180,
+        90 - (y + 1) * tileSize,
+        (x + 1) * tileSize - 180,
+        90 - y * tileSize
+    ].join(',');
 }
 
 // For all four borders: 0 - left, 1, right, 2 - top, 3 - bottom

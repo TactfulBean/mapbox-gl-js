@@ -291,7 +291,7 @@ class RasterArrayTileSource extends RasterTileSource<'raster-array'> {
             return;
         }
 
-        const url = this.map._requestManager.normalizeTileURL(tile.tileID.canonical.url(this.tiles, this.scheme), false, this.tileSize);
+        const url = this.map._requestManager.normalizeTileURL(tile.tileID.canonical.url(this.tiles, this.scheme, this.zoomOffset), false, this.tileSize);
 
         tile.source = this.id;
         tile.scope = this.scope;
@@ -586,7 +586,7 @@ class RasterArrayTileSource extends RasterTileSource<'raster-array'> {
     // No controller: the shared promise must settle (the `finally` drains the dedup entry),
     // or a rejected load would block the tile forever.
     private async _fetchTileForQuery(tile: RasterArrayTile): Promise<MapboxRasterTile> {
-        const url = this.map._requestManager.normalizeTileURL(tile.tileID.canonical.url(this.tiles, this.scheme), false, this.tileSize);
+        const url = this.map._requestManager.normalizeTileURL(tile.tileID.canonical.url(this.tiles, this.scheme, this.zoomOffset), false, this.tileSize);
 
         try {
             const request = await this.map._requestManager.transformRequest(url, ResourceType.Tile);

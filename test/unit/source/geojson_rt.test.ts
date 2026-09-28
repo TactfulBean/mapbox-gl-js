@@ -4,8 +4,8 @@ import {describe, test, expect} from '../../util/vitest';
 import GeoJSONRT from '../../../src/source/geojson_rt';
 
 // z10 tiles containing [-0.1, 51.5] and [10, 51.5] respectively
-const tileA = {uid: 1, canonical: {z: 10, x: 511, y: 340}};
-const tileB = {uid: 2, canonical: {z: 10, x: 540, y: 340}};
+const tileA = {uid: 1, canonical: {z: 10, x: 511, y: 109}};
+const tileB = {uid: 2, canonical: {z: 10, x: 540, y: 109}};
 
 const point = (id: number, lng: number, lat: number) => ({
     id,

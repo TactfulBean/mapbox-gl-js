@@ -884,6 +884,11 @@
       "default": "xyz",
       "doc": "Influences the y direction of the tile coordinates. The global-mercator (aka Spherical Mercator) profile is assumed."
     },
+    "zoomOffset": {
+      "type": "number",
+      "default": 0,
+      "doc": "An offset added to the canonical zoom when substituting the `{z}` token in tile URLs. Use this for tile services whose zoom numbering differs from the map zoom."
+    },
     "minzoom": {
       "type": "number",
       "default": 0,
@@ -989,6 +994,11 @@
       "default": "xyz",
       "doc": "Influences the y direction of the tile coordinates. The global-mercator (aka Spherical Mercator) profile is assumed."
     },
+    "zoomOffset": {
+      "type": "number",
+      "default": 0,
+      "doc": "An offset added to the canonical zoom when substituting the `{z}` token in tile URLs. Use this for tile services whose zoom numbering differs from the map zoom."
+    },
     "attribution": {
       "type": "string",
       "doc": "Contains an attribution to be displayed when the map is shown to a user."
@@ -1066,6 +1076,11 @@
       "default": 512,
       "units": "pixels",
       "doc": "The minimum visual size to display tiles for this layer. Only configurable for raster layers."
+    },
+    "zoomOffset": {
+      "type": "number",
+      "default": 0,
+      "doc": "An offset added to the canonical zoom when substituting the `{z}` token in tile URLs. Use this for tile services whose zoom numbering differs from the map zoom."
     },
     "attribution": {
       "type": "string",

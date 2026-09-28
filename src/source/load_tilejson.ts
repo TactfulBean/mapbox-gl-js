@@ -131,7 +131,7 @@ export function processTileJSON(options: Options, tileJSON: Partial<TileJSON>, r
     const result: TileJSON = pick(
         // explicit source options take precedence over TileJSON
         {...tileJSON as TileJSON, ...options},
-        ['tilejson', 'tiles', 'minzoom', 'maxzoom', 'attribution', 'mapbox_logo', 'bounds', 'extra_bounds', 'scheme', 'tileSize', 'encoding', 'vector_layers', 'raster_layers', 'worldview_options', 'worldview_default', 'worldview']
+        ['tilejson', 'tiles', 'minzoom', 'maxzoom', 'attribution', 'mapbox_logo', 'bounds', 'extra_bounds', 'scheme', 'tileSize', 'encoding', 'vector_layers', 'raster_layers', 'worldview_options', 'worldview_default', 'worldview', 'zoomOffset']
     );
 
     // Prefer TileJSON tiles when both url and tiles are set.

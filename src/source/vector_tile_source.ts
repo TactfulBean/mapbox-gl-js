@@ -64,6 +64,7 @@ class VectorTileSource extends Evented<SourceEvents> implements ISource<'vector'
     maxzoom: number;
     url!: string;
     scheme: string;
+    zoomOffset: number;
     tileSize: number;
     minTileCacheSize?: number;
     maxTileCacheSize?: number;
@@ -107,12 +108,13 @@ class VectorTileSource extends Evented<SourceEvents> implements ISource<'vector'
         this.minzoom = 0;
         this.maxzoom = 22;
         this.scheme = 'xyz';
+        this.zoomOffset = 0;
         this.tileSize = 512;
         this.reparseOverscaled = true;
         this.isTileClipped = true;
         this._loaded = false;
 
-        Object.assign(this, pick(options, ['url', 'scheme', 'tileSize', 'promoteId']));
+        Object.assign(this, pick(options, ['url', 'scheme', 'tileSize', 'promoteId', 'zoomOffset']));
         this._options = {type: 'vector', ...options};
 
         this._collectResourceTiming = !!options.collectResourceTiming;
@@ -315,7 +317,7 @@ class VectorTileSource extends Evented<SourceEvents> implements ISource<'vector'
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     async loadTile(tile: Tile, callback: Callback<WorkerSourceVectorTileResult | null>): Promise<void> {
-        const tileUrl = tile.tileID.canonical.url(this.tiles, this.scheme);
+        const tileUrl = tile.tileID.canonical.url(this.tiles, this.scheme, this.zoomOffset);
         const url = this.map._requestManager.normalizeTileURL(tileUrl);
 
         // Pick actor + state branch synchronously: this gates the re-entrant loadTile dedupe below.

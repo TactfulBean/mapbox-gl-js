@@ -37,7 +37,8 @@ export function altitudeFromMercatorZ(z: number, y: number): number {
     return z * circumferenceAtLatitude(latFromMercatorY(y));
 }
 
-export const MAX_MERCATOR_LATITUDE = 85.051129;
+// The 4490 tile grid includes both poles.
+export const MAX_MERCATOR_LATITUDE = 90;
 
 /**
  * @private
@@ -83,22 +84,22 @@ export function tileToMeter(canonical: CanonicalTileID, tileYCoordinate: number 
 /**
  * A `MercatorCoordinate` object represents a projected three dimensional position.
  *
- * `MercatorCoordinate` uses the web mercator projection ([EPSG:3857](https://epsg.io/3857)) with slightly different units:
- * - the size of 1 unit is the width of the projected world instead of the "mercator meter"
+ * `MercatorCoordinate` uses the EPSG:4490 latitude/longitude tile grid with slightly different units:
+ * - the size of 1 unit is the width of the projected world instead of a geographic degree
  * - the origin of the coordinate space is at the north-west corner instead of the middle.
  *
- * For example, `MercatorCoordinate(0, 0, 0)` is the north-west corner of the mercator world and
- * `MercatorCoordinate(1, 1, 0)` is the south-east corner. If you are familiar with
+ * For example, `MercatorCoordinate(0, 0, 0)` is the north-west corner of the EPSG:4490 world and
+ * `MercatorCoordinate(1, 0.5, 0)` is the south-east corner. If you are familiar with
  * [vector tiles](https://github.com/mapbox/vector-tile-spec) it may be helpful to think
  * of the coordinate space as the `0/0/0` tile with an extent of `1`.
  *
- * The `z` dimension of `MercatorCoordinate` is conformal. A cube in the mercator coordinate space would be rendered as a cube.
+ * The `z` dimension of `MercatorCoordinate` is scaled relative to the circumference at its latitude.
  *
  * @param {number} x The x component of the position.
  * @param {number} y The y component of the position.
  * @param {number} z The z component of the position.
  * @example
- * const nullIsland = new mapboxgl.MercatorCoordinate(0.5, 0.5, 0);
+ * const nullIsland = new mapboxgl.MercatorCoordinate(0.5, 0.25, 0);
  *
  * @see [Example: Add a custom style layer](https://www.mapbox.com/mapbox-gl-js/example/custom-style-layer/)
  */
@@ -121,7 +122,7 @@ class MercatorCoordinate {
      * @returns {MercatorCoordinate} The projected mercator coordinate.
      * @example
      * const coord = mapboxgl.MercatorCoordinate.fromLngLat({lng: 0, lat: 0}, 0);
-     * console.log(coord); // MercatorCoordinate(0.5, 0.5, 0)
+     * console.log(coord); // MercatorCoordinate(0.5, 0.25, 0)
      */
     static fromLngLat(lngLatLike: LngLatLike, altitude: number = 0): MercatorCoordinate {
         const lngLat = LngLat.convert(lngLatLike);
@@ -137,7 +138,7 @@ class MercatorCoordinate {
      *
      * @returns {LngLat} The `LngLat` object.
      * @example
-     * const coord = new mapboxgl.MercatorCoordinate(0.5, 0.5, 0);
+     * const coord = new mapboxgl.MercatorCoordinate(0.5, 0.25, 0);
      * const lngLat = coord.toLngLat(); // LngLat(0, 0)
      */
     toLngLat(): LngLat {

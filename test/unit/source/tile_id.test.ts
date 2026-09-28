@@ -37,6 +37,15 @@ describe('CanonicalTileID', () => {
             expect(new CanonicalTileID(15, 9876, 4321).url(['{z}/{x}/{z}_{x}_{y}.json'])).toEqual('15/9876/15_9876_4321.json');
         });
 
+        test('applies a zoom offset to {z}', () => {
+            expect(new CanonicalTileID(0, 0, 0).url(['{z}/{x}/{y}.json'], 'xyz', 1)).toEqual('1/0/0.json');
+        });
+
+        test('uses the EPSG:4490 TMS row numbering', () => {
+            expect(new CanonicalTileID(0, 0, 0).url(['{z}/{x}/{y}.json'], 'tms')).toEqual('0/0/0.json');
+            expect(new CanonicalTileID(2, 1, 0).url(['{z}/{x}/{y}.json'], 'tms')).toEqual('2/1/1.json');
+        });
+
         test('replaces {quadkey}', () => {
             expect(new CanonicalTileID(1, 0, 0).url(['quadkey={quadkey}'])).toEqual('quadkey=0');
             expect(new CanonicalTileID(2, 0, 0).url(['quadkey={quadkey}'])).toEqual('quadkey=00');
@@ -49,7 +58,7 @@ describe('CanonicalTileID', () => {
         });
 
         test('replaces {bbox-epsg-3857}', () => {
-            expect(new CanonicalTileID(1, 0, 0).url(['bbox={bbox-epsg-3857}'])).toEqual('bbox=-20037508.342789244,0,0,20037508.342789244');
+            expect(new CanonicalTileID(1, 0, 0).url(['bbox={bbox-epsg-3857}'])).toEqual('bbox=-180,-90,0,90');
         });
     });
 });

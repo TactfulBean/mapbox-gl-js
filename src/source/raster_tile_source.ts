@@ -55,6 +55,7 @@ class RasterTileSource<T = 'raster'> extends Evented<SourceEvents> implements IS
     maxzoom: number;
     url!: string;
     scheme: string;
+    zoomOffset: number;
     attribution: string | undefined;
     // eslint-disable-next-line camelcase
     mapbox_logo: boolean | undefined;
@@ -94,11 +95,12 @@ class RasterTileSource<T = 'raster'> extends Evented<SourceEvents> implements IS
         this.maxzoom = 22;
         this.roundZoom = true;
         this.scheme = 'xyz';
+        this.zoomOffset = 0;
         this.tileSize = 512;
         this._loaded = false;
 
         this._options = {type: 'raster', ...options};
-        Object.assign(this, pick(options, ['url', 'scheme', 'tileSize']));
+        Object.assign(this, pick(options, ['url', 'scheme', 'tileSize', 'zoomOffset']));
     }
 
     load(callback?: Callback<undefined>) {
@@ -273,7 +275,7 @@ class RasterTileSource<T = 'raster'> extends Evented<SourceEvents> implements IS
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     async loadTile(tile: Tile, callback: Callback<undefined>): Promise<void> {
         const use2x = browser.devicePixelRatio >= 2;
-        const url = this.map._requestManager.normalizeTileURL(tile.tileID.canonical.url(this.tiles, this.scheme), use2x, this.tileSize);
+        const url = this.map._requestManager.normalizeTileURL(tile.tileID.canonical.url(this.tiles, this.scheme, this.zoomOffset), use2x, this.tileSize);
         const controller = new AbortController();
         tile.request = controller;
 

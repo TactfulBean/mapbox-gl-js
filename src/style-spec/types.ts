@@ -441,6 +441,7 @@ export type VectorSourceSpecification = {
     "bounds"?: [number, number, number, number],
     "extra_bounds"?: Array<[number, number, number, number]>,
     "scheme"?: "xyz" | "tms",
+    "zoomOffset"?: number,
     "minzoom"?: number,
     "maxzoom"?: number,
     "attribution"?: string,
@@ -459,6 +460,7 @@ export type RasterSourceSpecification = {
     "maxzoom"?: number,
     "tileSize"?: number,
     "scheme"?: "xyz" | "tms",
+    "zoomOffset"?: number,
     "attribution"?: string,
     "volatile"?: boolean,
     [_: string]: unknown
@@ -473,6 +475,7 @@ export type RasterDEMSourceSpecification = {
     "minzoom"?: number,
     "maxzoom"?: number,
     "tileSize"?: number,
+    "zoomOffset"?: number,
     "attribution"?: string,
     "encoding"?: "terrarium" | "mapbox",
     "volatile"?: boolean,

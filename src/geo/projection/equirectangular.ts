@@ -1,6 +1,5 @@
 import LngLat from '../lng_lat';
 import {clamp} from '../../util/util';
-import {MAX_MERCATOR_LATITUDE} from '../mercator_coordinate';
 import Projection from './projection';
 
 import type {ProjectionSpecification} from '../../style-spec/types';
@@ -22,7 +21,7 @@ export default class Equirectangular extends Projection {
 
     override unproject(x: number, y: number): LngLat {
         const lng = (x - 0.5) * 360;
-        const lat = clamp((0.5 - y) * 360, -MAX_MERCATOR_LATITUDE, MAX_MERCATOR_LATITUDE);
+        const lat = clamp((0.5 - y) * 360, -90, 90);
         return new LngLat(lng, lat);
     }
 }

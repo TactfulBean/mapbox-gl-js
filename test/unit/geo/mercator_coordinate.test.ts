@@ -12,7 +12,12 @@ describe('LngLat', () => {
 
     test('#fromLngLat', () => {
         const nullIsland = new LngLat(0, 0);
-        expect(MercatorCoordinate.fromLngLat(nullIsland)).toEqual({x: 0.5, y: 0.5, z: 0});
+        expect(MercatorCoordinate.fromLngLat(nullIsland)).toEqual({x: 0.5, y: 0.25, z: 0});
+    });
+
+    test('#fromLngLat includes both poles', () => {
+        expect(MercatorCoordinate.fromLngLat(new LngLat(0, 90))).toEqual({x: 0.5, y: 0, z: 0});
+        expect(MercatorCoordinate.fromLngLat(new LngLat(0, -90))).toEqual({x: 0.5, y: 0.5, z: 0});
     });
 
     test('#toLngLat', () => {

@@ -10,6 +10,7 @@ import {createFilter} from '@rollup/pluginutils';
 import browserslistToEsbuild from 'browserslist-to-esbuild';
 import minifyStyleSpec from './rollup_plugin_minify_style_spec.js';
 import {eliminateDeadBranches} from './glsl_dead_code.ts';
+import {epsg4490Patches} from './epsg4490_patches.ts';
 
 import type {InputPluginOption, Plugin} from 'rollup';
 
@@ -40,6 +41,7 @@ export const plugins = ({
     keepClassNames
 }: BuildPluginOptions): InputPluginOption[] => [
     minifyStyleSpec(),
+    epsg4490Patches(),
     esbuild({
         target: browserslistToEsbuild(),
         minify: false,

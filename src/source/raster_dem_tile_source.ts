@@ -67,7 +67,7 @@ class RasterDEMTileSource extends RasterTileSource<'raster-dem'> {
     override async loadTile(tile: Tile, callback: Callback<undefined>): Promise<void> {
         if (tile.actor && tile.state !== 'expired') return;
 
-        const url = this.map._requestManager.normalizeTileURL(tile.tileID.canonical.url(this.tiles, this.scheme), false, this.tileSize);
+        const url = this.map._requestManager.normalizeTileURL(tile.tileID.canonical.url(this.tiles, this.scheme, this.zoomOffset), false, this.tileSize);
 
         // tile.actor stays synchronous so an abort/reload sees the live actor immediately.
         tile.actor = this.dispatcher.getActor();
